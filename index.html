@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CATALOG</title>
+  <style>
+    body {
+      background-color: rgb(245, 245, 245);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    form {
+      z-index: 512;
+      color: grey;
+    }
+
+    #details {
+      width: 100%;
+      height: 100%;
+    }
+
+    #files {
+      background-color: rgba(254, 254, 254);
+      padding: 20px;
+      text-align: center;
+      position: fixed;
+      left: 50px;
+      top: 110px;
+      bottom: 2%;
+      width: 23%;
+      overflow: scroll;
+      font-size: 130%;
+      border: rgb(237, 237, 237) solid;
+    }
+
+    #files p {
+      border-top: rgb(237, 237, 237) solid 1px;
+      border-bottom: rgb(237, 237, 237) solid 1px;
+      padding: 15px;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    #files::-webkit-scrollbar {
+      display: none;
+    }
+
+    #content {
+      position: fixed;
+      width: 65%;
+      right: 2%;
+      top: 110px;
+      bottom: 2%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: scroll;
+      font-size: 120%;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>My Server</h1>
+  <form>
+    <label><input class="radio1" type="radio" name="render" checked>render on this page</label>
+    <label><input class="radio2" type="radio" name="render">go to another page</label>
+  </form>
+  <div class="details">
+    <div id="files"></div>
+    <div id="content">
+      <div>THIS IS A PLACEHOLDER</div>
+    </div>
+  </div>
+
+  <script>
+    let imgs = ["png", "svg", "jpg", "ico"];
+    let videos = ["mp4", "flv", "avi"];
+    let audios = ["mp3", "flac"];
+    let txts = ["txt", "html", "js", "css", "md", "cpp", "json"];
+
+    // 在页面左侧渲染文件目录
+    fetch("paths.json", {
+      method: "GET",
+      mode: "cors",
+      credentials: "include"
+    })
+      .then(response => {
+        response.json().then(data => {
+          let p = document.createElement("h1");
+          let text = document.createTextNode("Files");
+          let div = document.querySelector("#files");
+          p.append(text);
+          div.append(p);
+          for (let i = 0; i < data.length; ++i) {
+            let p = document.createElement("p");
+            let text = document.createTextNode(data[i].name);
+            let div = document.querySelector("#files");
+            p.append(text);
+            div.append(p);
+          }
+        })
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    document.querySelector("#files").addEventListener("click", function (event) {
+      // 阻止事件冒泡
+      event.stopPropagation();
+      let fileName = event.target.innerText;
+      let suffix = fileName.split(".")[1];
+      if (document.querySelector(".radio1").checked) {
+        let div = document.querySelector("#content");
+        // 去掉flex 否则文本过长会居中摆放
+        div.style.display = "block";
+
+        // 如果是文本
+        if (txts.indexOf(suffix) !== -1) {
+          // location.href = location.origin + "/" + fileName;
+          let url = location.origin + "/" + fileName;
+          fetch(url, {
+            method: "GET",
+            mode: "cors",
+            credentials: "include"
+          })
+            .then(response => {
+              response.text().then(data => {
+                let p = document.createElement("p");
+                div.innerHTML = "";
+                if (suffix === "cpp" || suffix === "html" || suffix === "css" || suffix === "js") {
+                  let pre = document.createElement("pre");
+                  let code = document.createElement("code");
+                  code.innerHTML = data;
+                  pre.append(code);
+                  div.append(pre);
+                }
+                else {
+                  p.innerHTML = data;
+                  div.append(p);
+                }
+              })
+            })
+        }
+        else {
+          div.style.display = "flex";
+          // 如果是图片
+          if (imgs.indexOf(suffix) !== -1) {
+            let img = document.createElement("img");
+            console.log(img);
+            img.setAttribute("src", fileName);
+            div.innerHTML = "";
+            div.append(img);
+          }
+          // 如果是视频
+          else if (videos.indexOf(suffix) !== -1) {
+            let video = document.createElement("video");
+            video.setAttribute("src", fileName);
+            video.setAttribute("controls", true);
+            div.innerHTML = "";
+            div.append(video);
+          }
+          // 如果是音频
+          else if (audios.indexOf(suffix) !== -1) {
+            let audio = document.createElement("audio");
+            audio.setAttribute("src", fileName);
+            audio.setAttribute("controls", true);
+            div.innerHTML = "";
+            div.append(audio);
+          }
+          // 不支持类型
+          else {
+            console.log("No")
+          }
+        }
+      }
+      else {
+        location.href = location.origin + "/" + fileName;
+      }
+    })
+  </script>
+</body>
+
+</html>
