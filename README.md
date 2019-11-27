@@ -6,13 +6,13 @@
 
 > |----`server`
 >
-> |	 |----`public`
+> |----|----`public`
 >
-> |	 |----`src`
+> |----|----`src`
 >
-> |		   |----`index.html`
+> |----|----|----`index.html`
 >
-> |		   |----`server.js`
+> |----|----|----`server.js`
 >
 > |----`README.md`
 
@@ -32,21 +32,21 @@
 
    > |----`public`
    >
-   > |     |----catalog
+   > |----|----catalog
    >
-   > |			|----file1.txt
+   > |----|----|----file1.txt
    >
-   > |		    |----file2.md
+   > |----|----|----file2.md
    >
-   > |		    |----file3.js
+   > |----|----|----file3.js
    >
-   > |     	   |----file4.png
+   > |----|----|----file4.png
    >
-   > |     	   |----file5.mp3
+   > |----|----|----file5.mp3
    >
-   > |     	   |----file6.mp4
+   > |----|----|----file6.mp4
    >
-   > |  	      |----index.html
+   > |----|----|----index.html
 
 3. 在`server`目录下运行`server.js`，在浏览器中打开http://127.0.0.1:1027 ，进入`index.html`页面
 
@@ -70,23 +70,23 @@
 
    > |----`public`
    >
-   > |     |----myFolder1
+   > |----|----myFolder1
    >
-   > |		 	|----file1.txt
+   > |----|----|----file1.txt
    >
-   > |		 	|----file2.md
+   > |----|----|----file2.md
    >
-   > |		 	|----file3.js
+   > |----|----|----file3.js
    >
-   > |		 	|----index.html
+   > |----|----|----index.html
    >
-   > |     |----myFolder2
+   > |----|----myFolder2
    >
-   > |     		|----file1.mp3
+   > |----|----|----file1.mp3
    >
-   > |     		|----file2.mp4
+   > |----|----|----file2.mp4
    >
-   > |		 	|----index.html
+   > |----|----|----index.html
 
 3. 通过命令行运行服务器
 
